@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ADRA Zimbabwe — Invoicer</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img src="assets/logo.png" alt="ADRA Zimbabwe" onerror="this.style.display='none';document.getElementById('brandText').style.display='block';" />
+      <div id="brandText" class="brand-text">ADRA Zimbabwe</div>
+    </div>
+    <nav class="tabs">
+      <button id="tab-new" class="tab active">+ New Invoice</button>
+      <button id="tab-list" class="tab">Invoices</button>
+      <button id="tab-settings" class="tab">Settings</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- New Invoice -->
+    <section id="view-new" class="view">
+      <div class="panel">
+        <h2>Bill To</h2>
+        <label>Client / Company</label>
+        <input id="clientName" placeholder="Client name" />
+        <label>Address / Email / Phone</label>
+        <textarea id="clientAddress" placeholder="Address or contact details"></textarea>
+      </div>
+
+      <div class="panel">
+        <h2>Invoice Info</h2>
+        <div class="row2">
+          <div>
+            <label>Date</label>
+            <input type="date" id="date" />
+          </div>
+          <div>
+            <label>Due Date</label>
+            <input type="date" id="dueDate" />
+          </div>
+        </div>
+        <div>
+          <label>Tax Rate (%)</label>
+          <input type="number" id="taxRate" value="0" />
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <h2>Items</h2>
+          <button id="addItem" class="btn">Add Item</button>
+        </div>
+        <div class="table-wrap">
+          <table class="items">
+            <thead>
+              <tr>
+                <th>Description</th>
+                <th class="w-qty">Qty</th>
+                <th class="w-price">Unit Price</th>
+                <th class="w-amt">Line Total</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="itemsBody"></tbody>
+          </table>
+        </div>
+
+        <div class="row2 mt">
+          <div>
+            <label>Notes (optional)</label>
+            <textarea id="notes" placeholder="Payment terms, bank details, etc."></textarea>
+          </div>
+          <div class="totals">
+            <div class="totline">
+              <span>Subtotal</span><span id="subtotalVal">$ 0.00</span>
+            </div>
+            <div class="totline">
+              <span>Tax (<span id="taxPct">0</span>%)</span><span id="taxVal">$ 0.00</span>
+            </div>
+            <div class="totline grand">
+              <span>Total</span><span id="totalVal">$ 0.00</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="saveInvoice" class="btn primary">Save Invoice</button>
+          <button id="clearForm" class="btn">Clear</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Invoices List -->
+    <section id="view-list" class="view hidden">
+      <div class="panel">
+        <div class="row2">
+          <input id="search" placeholder="Search by number, client, date, total..." />
+          <div class="right">
+            <button id="exportJSON" class="btn">Export JSON</button>
+            <label class="btn filelabel">Import JSON<input id="importJSON" type="file" accept="application/json"/></label>
+          </div>
+        </div>
+      </div>
+      <div class="panel no-pad">
+        <div class="table-wrap">
+          <table class="list">
+            <thead>
+              <tr>
+                <th>Invoice #</th>
+                <th>Client</th>
+                <th>Date</th>
+                <th>Due</th>
+                <th class="right">Total</th>
+                <th class="right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="listBody">
+              <tr><td colspan="6" class="empty">No invoices yet.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Settings -->
+    <section id="view-settings" class="view hidden">
+      <div class="panel grid2">
+        <div>
+          <h2>Business Details</h2>
+          <label>Business Name</label>
+          <input id="bizName" />
+          <label>Address / Contacts</label>
+          <textarea id="bizAddress"></textarea>
+          <label>Footer Note</label>
+          <input id="footerNote" />
+        </div>
+        <div>
+          <h2>Numbering & Currency</h2>
+          <label>Prefix</label>
+          <input id="prefix" />
+          <label>Zero Padding</label>
+          <input type="number" id="padding" />
+          <label>Currency</label>
+          <input id="currency" />
+          <button id="resetCounter" class="btn mt">Reset Numbering (to 1)</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal for viewing/printing -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-top">
+        <div>
+          <div class="title">Invoice <span id="mNumber"></span></div>
+          <div class="muted" id="mCreated"></div>
+        </div>
+        <div>
+          <button id="btnPrint" class="btn">Print / Save PDF</button>
+          <button id="btnClose" class="btn">Close</button>
+        </div>
+      </div>
+      <div id="printable"></div>
+    </div>
+  </div>
+
+  <footer class="footnote">
+    Data is stored locally in your browser (localStorage). Use Export to back up.
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
