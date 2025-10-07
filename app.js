@@ -264,6 +264,21 @@ const mNumber = document.getElementById('mNumber');
 const mCreated = document.getElementById('mCreated');
 const printable = document.getElementById('printable');
 
+// --- Modal Close Controls ---
+function hideModal() { 
+  modal.classList.add('hidden'); 
+}
+btnClose.onclick = hideModal;
+btnPrint.onclick = () => window.print();
+
+// Allow Esc key or clicking outside the modal to close
+window.addEventListener('keydown', e => {
+  if (e.key === 'Escape') hideModal();
+});
+modal.addEventListener('click', e => {
+  if (e.target === modal) hideModal();
+});
+
 function openModal(inv){
   mNumber.textContent = inv.number;
   mCreated.textContent = "Created " + new Date(inv.createdAt).toLocaleString();
